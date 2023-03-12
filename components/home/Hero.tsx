@@ -17,8 +17,8 @@ const Hero = () => {
           Mohamed Achaq
         </h1>
         <h3 className="text-xl text-text-secondary-light dark:text-text-secondary-dark font-medium">
-          I&apos;m skilled software engineer based in Morocco, with a passion
-          for coding and problem-solving. I have a solid background in computer
+          I&apos;m a software engineer based in Morocco, with a passion for
+          coding and problem-solving. I have a solid background in computer
           science and extensive experience in developing software applications
           for various industries. I&apos;m a detail-oriented individual who
           enjoys tackling complex challenges and delivering high-quality
