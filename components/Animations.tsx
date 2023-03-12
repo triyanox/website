@@ -95,6 +95,28 @@ const AnimationList = {
       },
     },
   },
+  fadeInWithExit: {
+    hidden: {
+      opacity: 0,
+      scale: 0.9,
+      y: 20,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+      },
+    },
+    exit: {
+      scale: 0.9,
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  },
 };
 
 type ContainerProps = {
@@ -168,6 +190,7 @@ const AnimateItem = ({ children, className, variant }: ItemProps) => {
       variants={AnimationList[variant]}
       initial="hidden"
       animate={controls}
+      exit="hidden"
       className={className}
     >
       {children}
@@ -177,30 +200,30 @@ const AnimateItem = ({ children, className, variant }: ItemProps) => {
 
 const PresenceContainer = ({ children, className }: ContainerProps) => {
   return (
-    <AnimatePresence mode="sync" presenceAffectsLayout>
-      <motion.div
-        className={className}
-        initial="hidden"
-        animate="visible"
-        exit="hidden"
-        variants={{
-          hidden: {
-            transition: {
-              staggerChildren: 0.1,
-              duration: 0.5,
-            },
+    <motion.div
+      className={className}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      variants={{
+        hidden: {
+          transition: {
+            staggerChildren: 0.1,
+            duration: 0.5,
           },
-          visible: {
-            transition: {
-              staggerChildren: 0.1,
-              duration: 0.5,
-            },
+        },
+        visible: {
+          transition: {
+            staggerChildren: 0.1,
+            duration: 0.5,
           },
-        }}
-      >
+        },
+      }}
+    >
+      <AnimatePresence mode="wait" presenceAffectsLayout>
         {children}
-      </motion.div>
-    </AnimatePresence>
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
@@ -210,7 +233,7 @@ const PresenceItem = ({ children, className, variant }: ItemProps) => {
       variants={AnimationList[variant]}
       initial="hidden"
       animate="visible"
-      exit="hidden"
+      exit="exit"
       className={className}
     >
       {children}

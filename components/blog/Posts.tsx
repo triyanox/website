@@ -2,6 +2,7 @@
 import classNames from "classnames";
 import Animations from "components/Animations";
 import { allPosts, Post } from "contentlayer/generated";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import PostCard from "./PostCard";
 
@@ -83,33 +84,50 @@ const Posts = () => {
           ))}
         </div>
       </div>
-      {filter(allPosts, filters.tags, filters.search).length === 0 && (
-        <div className="w-full flex justify-center items-center gap-8 flex-col py-16">
-          <h1 className="text-4xl font-bold text-text-primary-light dark:text-text-primary-dark">
-            No posts found
-          </h1>
-
-          <button
-            className="text-lg text-text-secondary-light dark:text-text-secondary-dark px-2 py-1 rounded-xl bg-bg-secondary-light dark:bg-bg-secondary-dark"
-            onClick={() => {
-              setFilters({
-                ...filters,
-                tags: [],
-                search: "",
-              });
+      <AnimatePresence mode="popLayout">
+        {!filter(allPosts, filters.tags, filters.search).length ? (
+          <motion.div
+            initial={{
+              opacity: 0,
             }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.5,
+            }}
+            className="w-full flex justify-center items-center gap-8 flex-col py-16"
           >
-            Clear Filters
-          </button>
-        </div>
-      )}
-      <Animations.PresenceContainer className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 py-8">
-        {filter(allPosts, filters.tags, filters.search).map((post) => (
-          <Animations.PresenceItem variant="fadeIn" key={post._id}>
-            <PostCard post={post} />
-          </Animations.PresenceItem>
-        ))}
-      </Animations.PresenceContainer>
+            <h1 className="text-4xl font-bold text-text-primary-light dark:text-text-primary-dark">
+              No posts found
+            </h1>
+
+            <button
+              className="text-lg text-text-secondary-light dark:text-text-secondary-dark px-2 py-1 rounded-xl bg-bg-secondary-light dark:bg-bg-secondary-dark"
+              onClick={() => {
+                setFilters({
+                  ...filters,
+                  tags: [],
+                  search: "",
+                });
+              }}
+            >
+              Clear Filters
+            </button>
+          </motion.div>
+        ) : (
+          <Animations.PresenceContainer className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 py-8">
+            {filter(allPosts, filters.tags, filters.search).map((post) => (
+              <Animations.PresenceItem variant="fadeInWithExit" key={post._id}>
+                <PostCard post={post} />
+              </Animations.PresenceItem>
+            ))}
+          </Animations.PresenceContainer>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
