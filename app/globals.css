@@ -1,0 +1,256 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+body::-webkit-scrollbar {
+  display: none;
+  scroll-behavior: smooth;
+}
+
+button:focus {
+  outline: none;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-BoldIt.woff2") format("woff2");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-ExtraBold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-RegularIt.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-ExtraBoldIt.woff2") format("woff2");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-ThinIt.woff2") format("woff2");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-SemiBoldIt.woff2") format("woff2");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-LightIt.woff2") format("woff2");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Wright Pro";
+  src: url("/fonts/WrightPro-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+pre {
+  font-family: "Wright Pro", monospace;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  @apply text-code-comment-light dark:text-code-comment-dark;
+}
+
+.token.punctuation {
+  @apply text-code-punctuation-light dark:text-code-punctuation-dark;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  @apply text-code-property-light dark:text-code-property-dark;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  @apply text-code-selector-light dark:text-code-selector-dark;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  @apply text-code-operator-light dark:text-code-operator-dark;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  @apply text-code-atrule-light dark:text-code-atrule-dark;
+}
+
+.token.function,
+.token.class-name {
+  @apply text-code-function-light dark:text-code-function-dark;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  @apply text-code-regexp-light dark:text-code-regexp-dark;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+  @apply text-text-primary-light dark:text-text-primary-dark;
+}
+
+pre::-webkit-scrollbar {
+  display: none;
+}
+
+pre {
+  @apply rounded-xl;
+}
+
+pre {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.rehype-code-title {
+  @apply rounded-t-3xl bg-bg-secondary-light px-5 py-3 text-lg font-bold text-text-primary-light first-letter:uppercase dark:bg-bg-secondary-dark dark:text-text-primary-dark;
+}
+
+.rehype-code-title + pre {
+  @apply mt-0 rounded-t-none;
+}
+
+.highlight-line {
+  @apply -mx-4 block border-l-4 border-cyan-500 bg-gray-100 px-4 dark:bg-gray-800;
+}
+
+input[type="text"],
+input[type="email"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.code-highlight {
+  float: left;
+  min-width: 100%;
+}
+
+.code-line {
+  display: block;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: -16px;
+  margin-right: -16px;
+  border-left-width: 4px;
+  border-left-color: rgba(31, 41, 55, 0);
+}
+
+.code-line.inserted {
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+.code-line.deleted {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.highlight-line {
+  margin-left: -16px;
+  margin-right: -16px;
+  border-left-width: 4px;
+}
+
+.highlight-line {
+  @apply border-l-black bg-bg-primary-light/40 dark:border-l-white dark:bg-bg-primary-dark/40;
+}
+
+.line-number::before {
+  display: inline-block;
+  width: 1rem;
+  text-align: right;
+  margin-right: 16px;
+  margin-left: -8px;
+  content: attr(line);
+}
+
+.line-number::before {
+  @apply text-sm text-text-secondary-light dark:text-text-secondary-dark;
+}

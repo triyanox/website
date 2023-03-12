@@ -1,0 +1,505 @@
+---
+title: Typescript Design Patterns
+date: "2022-01-02"
+description: "Typescript Design Patterns"
+tags: ["typescript", "design patterns"]
+---
+
+Hello guys and welcome to a new blog post about Design Patterns in TypeScript.
+
+# What is a pattern
+
+A Design Pattern is a set of best practices used to solve common problems in software development and make writing clean and mantainable code easier.
+
+# Singleton
+
+The **Singleton** pattern is a design pattern that restricts the instantiation of a class to one object and it's
+used to ensure that only one object of a class is created.
+
+Implementing the Singleton pattern in Typescript is very easy
+
+```typeScript
+class Singleton {
+  private static instance: Singleton;
+
+  private constructor() {}
+
+  public static getInstance(): Singleton {
+    if (!Singleton.instance) {
+      Singleton.instance = new Singleton();
+    }
+    return Singleton.instance;
+  }
+}
+```
+
+and you can use it like this:
+
+```javascript
+const singleton = Singleton.getInstance();
+```
+
+# Factory
+
+The **Factory** pattern is a design pattern lets you create objects without specifying the exact class of the object that will be created.
+
+In this example we want to make a vehicle depending on it's type so instad of making a class for each type we make a single factory class to make us a vehicle depending on the type we give it .
+
+```typeScript
+class VehicleFactory {
+  public createVehicle(type: string): Vehicle {
+    switch (type) {
+      case 'car':
+        return new Car();
+      case 'truck':
+        return new Truck();
+      default:
+        throw new Error(`Vehicle of type ${type} not found`);
+    }
+  }
+}
+```
+
+and then you can use it like this to make as much as you want of vehicles as long as you provide the type
+
+```typeScript
+const factory = new VehicleFactory();
+const car = factory.createVehicle('car');
+const truck = factory.createVehicle('truck');
+```
+
+# Observer
+
+The **Observer** pattern is a design pattern lets you define a subscription mechanism to notify multiple objects and it's used in
+mainly in the event driven programming paradigm.
+
+Implementing the Observer pattern in Typescript can look like this
+
+```typeScript
+class Subject {
+  private observers: Observer[] = [];
+
+  public subscribe(observer: Observer) {
+    this.observers.push(observer);
+  }
+
+  public unsubscribe(observer: Observer) {
+    const index = this.observers.indexOf(observer);
+    this.observers.splice(index, 1);
+  }
+
+  public notify(data: any) {
+    this.observers.forEach(observer => observer.update(data));
+  }
+}
+```
+
+then you will need an observer class
+
+```typeScript
+class Observer {
+  public update(data: any) {
+    console.log(data);
+  }
+}
+```
+
+and then you can let the subject know that there is a new data available by subscribing to the observer we created
+
+```typeScript
+const subject = new Subject();
+const observer = new Observer();
+subject.subscribe(observer);
+subject.notify('Hello World');
+```
+
+and you can also unsubscribe the observer from the subject:
+
+```typeScript
+subject.unsubscribe(observer);
+```
+
+# Command
+
+The **Command** pattern is a design pattern lets you encapsulate all information needed to perform an action in one object .
+
+Implementing the Command pattern can look like this
+
+```typeScript
+class Command {
+  constructor(private receiver: Receiver) {}
+
+  public execute() {
+    this.receiver.action();
+  }
+}
+```
+
+then you can use the command module to create a command object and pass it to the invoker.
+
+```typeScript
+const receiver = new Receiver();
+const command = new Command(receiver);
+const invoker = new Invoker();
+invoker.setCommand(command);
+invoker.execute();
+```
+
+# Strategy
+
+The **Strategy** pattern is a design pattern lets you define a family of algorithms, encapsulate each one, and make them interchangeable.
+
+Implementing the Strategy pattern in Typescript is very easy and you can start with this Strategy class
+
+```typeScript
+class Strategy {
+  public LastElement(data: []) {
+    return data[data.length - 1];
+  }
+
+}
+```
+
+and then you can use it like this:
+
+```typeScript
+const strategy = new Strategy();
+const data = [1, 2, 3, 4, 5];
+
+let last = strategy.LastElement(data);
+```
+
+# Template Method
+
+The **Template Method** pattern is a design pattern lets you define the skeleton of an algorithm in an operation, deferring some steps to subclasses.
+
+For example you want to make a pizza and you want to make it with tomato sauce, cheese and ham but you don't want to repeat the same steps for every pizza you make
+so instad you can define the steps in a template method and then you can use it to make different pizzas.
+
+The Implementation will be like this
+
+```typeScript
+class Pizza {
+  public makePizza() {
+    this.prepareDough();
+    this.addSauce();
+    this.addToppings();
+    this.bake();
+  }
+
+  public prepareDough() {
+    console.log('Preparing dough...');
+  }
+
+  public addSauce() {
+    console.log('Adding sauce...');
+  }
+
+  public addToppings() {
+    console.log('Adding toppings: cheese, ham, mushrooms');
+  }
+
+  public bake() {
+    console.log('Bake for 25 minutes at 350');
+  }
+}
+```
+
+# Builder
+
+The **Builder** pattern is a design pattern lets you construct complex objects step by step and it's used in
+mainly in the object oriented programming paradigm.
+
+And you can implement the Builder pattern in Typescript is very easy and you can use the builder module.
+
+```typeScript
+class Builder {
+  public build() {
+    return new Product();
+  }
+}
+```
+
+Then you make a product class :
+
+```typeScript
+class Product {
+  constructor(private partA: string, private partB: string) {}
+}
+```
+
+Then you make a director class to build the builder:
+
+```typeScript
+class Director {
+  public build(builder: Builder) {
+    builder.buildPartA();
+    builder.buildPartB();
+  }
+}
+```
+
+Then you make a ConcreteBuilder that implements the Builder interface:
+
+```typeScript
+class ConcreteBuilder extends Builder {
+  private product: Product;
+
+  public buildPartA() {
+    this.product.partA = 'Part A';
+  }
+
+  public buildPartB() {
+    this.product.partB = 'Part B';
+  }
+
+  public getProduct() {
+    const product = this.product;
+    this.reset();
+    return product;
+  }
+
+  public reset() {
+    this.product = new Product('', '');
+  }
+}
+```
+
+```typeScript
+const builder = new ConcreteBuilder();
+const director = new Director();
+director.build(builder);
+// make a new product
+const product = new Product('Part A', 'Part B');
+// get the product
+const newProduct = builder.getProduct();
+```
+
+# Decorator
+
+The **Decorator** pattern is a design pattern lets you dynamically change the behavior of an object at run time
+and it's communly used in frameworks like Angular.
+
+And you can implement the Decorator pattern in Typescript is very easy and you can use the decorator module.
+
+Again imagine you want to make a pizza and you want to make it with tomato sauce, cheese and ham but you don't want to repeat the same steps for every pizza you make
+
+First you need to make a pizza class:
+
+```typeScript
+class Pizza {
+  public makePizza() {
+    console.log('Making a pizza...');
+  }
+}
+```
+
+Then you make a decorator class that will decorate the pizza class:
+
+```typeScript
+class PizzaDecorator extends Pizza {
+  constructor(public pizza: Pizza) {
+    super();
+  }
+
+  public makePizza() {
+    this.pizza.makePizza();
+  }
+}
+```
+
+Then you make a concrete decorator class that extends the decorator class to add the cheese:
+
+```typeScript
+class CheeseDecorator extends PizzaDecorator {
+  constructor(pizza: Pizza) {
+    super(pizza);
+  }
+
+  public makePizza() {
+    super.makePizza();
+    console.log('Adding cheese...');
+  }
+}
+```
+
+Then you make a concrete decorator class that extends the decorator class to add the ham:
+
+```typeScript
+class HamDecorator extends PizzaDecorator {
+  constructor(pizza: Pizza) {
+    super(pizza);
+  }
+
+  public makePizza() {
+    super.makePizza();
+    console.log('Adding ham...');
+  }
+}
+```
+
+Then you make a concrete decorator class that extends the decorator class to add the mushrooms:
+
+```typeScript
+class MushroomDecorator extends PizzaDecorator {
+  constructor(pizza: Pizza) {
+    super(pizza);
+  }
+
+  public makePizza() {
+    super.makePizza();
+    console.log('Adding mushrooms...');
+  }
+}
+```
+
+Then you make your pizza:
+
+```typeScript
+const pizza = new CheeseDecorator(new HamDecorator(new MushroomDecorator(new Pizza())));
+pizza.makePizza();
+```
+
+as you can see the decorator pattern uses nested classes and inheritance to add new functionality to an object.
+
+# Adapter
+
+The **Adapter** design pattern is a design pattern lets you convert the interface of a class into another interface
+that it expects.
+
+imagine you want to turn a socket into a plug.
+
+```typeScript
+class Socket {
+  constructor(private type: string) {}
+
+  public getType() {
+    return this.type;
+  }
+}
+```
+
+Then you make a plug class:
+
+```typeScript
+class Plug {
+  constructor(private type: string) {}
+
+  public getType() {
+    return this.type;
+  }
+}
+```
+
+Then you make an adapter class that will adapt the socket class to the plug class:
+
+```typeScript
+class SocketAdapter implements Plug {
+  constructor(private socket: Socket) {}
+
+  public getType() {
+    return this.socket.getType();
+  }
+}
+```
+
+Then you make your plug:
+
+```typeScript
+const plug = new SocketAdapter(new Socket('Type-C'));
+console.log(plug.getType());
+```
+
+As you can see the adapter class uses inheritance to adapt the socket class to the plug class.
+
+# Facade
+
+The **Facade** pattern is a design pattern lets you define a simple unified interface to a large body of code .
+
+imagine you want to make a car and you want to make it with a engine, transmission, and wheels.
+
+First you need to make a car class:
+
+```typeScript
+class Car {
+  public makeCar() {
+    console.log('Making a car...');
+  }
+}
+```
+
+Then you make a facade class that will make the car with an engine, transmission, and wheels and abstract the process from the user
+
+```typeScript
+class CarFacade {
+  constructor(private car: Car) {}
+
+  public makeCar() {
+    this.car.makeCar();
+    this.makeEngine();
+    this.makeTransmission();
+    this.makeWheels();
+  }
+
+  private makeEngine() {
+    console.log('Making engine...');
+  }
+
+  private makeTransmission() {
+    console.log('Making transmission...');
+  }
+
+  private makeWheels() {
+    console.log('Making wheels...');
+  }
+}
+```
+
+Then you make your car:
+
+```typeScript
+const car = new CarFacade(new Car());
+car.makeCar();
+```
+
+# Proxy
+
+The **Proxy** design pattern is a design pattern lets you provide a surrogate or placeholder object
+for another object to control access to it.
+
+For example imagine you want to give students access to a library but you don't want them to be able to access the library directly.
+
+First you need to make a library class:
+
+```typeScript
+class Library {
+  public getBooks() {
+    console.log('Getting books...');
+  }
+}
+```
+
+Then you make a proxy class that will give students access to the library:
+
+```typeScript
+class LibraryProxy {
+  constructor(private library: Library) {}
+
+  public getBooks() {
+    this.library.getBooks();
+  }
+}
+```
+
+Then you make your library:
+
+```typeScript
+const library = new LibraryProxy(new Library());
+library.getBooks();
+```
+
+# Conclusion
+
+You don't need to know design patterns to make software but you can get lot of benifits from them,
+like writing clean and maintanable code and overcome problems faster, better and more efficiently.
+That was it for this blog post about design patterns, hope you enjoy it.
