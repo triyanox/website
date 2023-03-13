@@ -120,11 +120,19 @@ const Posts = () => {
           </motion.div>
         ) : (
           <Animations.PresenceContainer className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 py-8">
-            {filter(allPosts, filters.tags, filters.search).map((post) => (
-              <Animations.PresenceItem variant="fadeInWithExit" key={post._id}>
-                <PostCard post={post} />
-              </Animations.PresenceItem>
-            ))}
+            {filter(allPosts, filters.tags, filters.search)
+              .sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              )
+              .map((post) => (
+                <Animations.PresenceItem
+                  variant="fadeInWithExit"
+                  key={post._id}
+                >
+                  <PostCard post={post} />
+                </Animations.PresenceItem>
+              ))}
           </Animations.PresenceContainer>
         )}
       </AnimatePresence>
