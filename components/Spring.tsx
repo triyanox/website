@@ -67,7 +67,7 @@ export const Tabs = ({
                   pathname?.includes(item.link),
               },
               {
-                "font-bold": pathname?.includes(item.link),
+                "font-bold": pathname === item.link,
               }
             )}
             ref={(el) => (buttonRefs[i] = el)}
