@@ -1,6 +1,6 @@
 "use client";
 import Animations from "components/Animations";
-import { Package, Code, Link } from "components/icons";
+import Icons from "components/icons";
 import ToolTip from "components/Tooltip";
 import NextLink from "next/link";
 
@@ -54,21 +54,21 @@ const Projects = () => {
                 {project.github && (
                   <NextLink target={"_blank"} href={project.github}>
                     <ToolTip text="Github">
-                      <Code />
+                      <Icons.Code />
                     </ToolTip>
                   </NextLink>
                 )}
                 {project.package && (
                   <NextLink target={"_blank"} href={project.package}>
                     <ToolTip text="Package">
-                      <Package />
+                      <Icons.Package />
                     </ToolTip>
                   </NextLink>
                 )}
                 {project.link && (
                   <NextLink target={"_blank"} href={project.link}>
                     <ToolTip text="Open">
-                      <Link />
+                      <Icons.Link />
                     </ToolTip>
                   </NextLink>
                 )}

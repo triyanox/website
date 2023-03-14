@@ -490,7 +490,7 @@ const CheckMark = () => {
   );
 };
 
-export {
+const Icons = {
   CheckMark,
   Heart,
   Mail,
@@ -511,3 +511,5 @@ export {
   Twitter,
   Github,
 };
+
+export default Icons;

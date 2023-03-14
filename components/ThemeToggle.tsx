@@ -1,8 +1,8 @@
 "use client";
+import Icons from "components/icons";
+import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Moon, LightBlob } from "components/icons";
 
 const ThemeToggle = () => {
   const [mounted, setMounted] = useState(false);
@@ -22,7 +22,7 @@ const ThemeToggle = () => {
           className="w-12 h-12 p-3 rounded-full bg-bg-secondary-light dark:bg-bg-secondary-dark active:scale-90 transition-all duration-200 hover:scale-105 ring-0 hover:ring-2 ring-bg-secondary-dark/10 dark:ring-bg-secondary-light/10"
           onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
         >
-          {resolvedTheme === "dark" ? <LightBlob /> : <Moon />}
+          {resolvedTheme === "dark" ? <Icons.LightBlob /> : <Icons.Moon />}
         </button>
       )}
     </motion.div>
