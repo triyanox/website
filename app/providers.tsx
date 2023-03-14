@@ -5,7 +5,7 @@ import { SWRConfig } from "swr";
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SWRConfig>
-      <ThemeProvider attribute="class" defaultTheme="dark">
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
         {children}
       </ThemeProvider>
     </SWRConfig>
