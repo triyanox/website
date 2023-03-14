@@ -21,7 +21,7 @@ const PostCard = ({ post }: { post: Post }) => {
       className="w-full flex h-full justify-center items-start gap-2 flex-col px-6 py-8 rounded-2xl bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary dark:shadow-shadow-secondary-dark"
     >
       <h3 className="text-2xl font-bold">{post.title}</h3>
-      <div className="flex w-full items-center justify-start gap-2 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+      <div className="flex w-full items-center justify-start gap-2 text-xs md:text-sm text-text-secondary-light dark:text-text-secondary-dark">
         <p className="">
           {new Date(post.date).toLocaleDateString("en-US", {
             year: "numeric",
@@ -41,7 +41,7 @@ const PostCard = ({ post }: { post: Post }) => {
         {post.tags.map((tag, i) => (
           <span
             key={i}
-            className="text-md text-text-secondary-light dark:text-text-secondary-dark bg-bg-primary-light dark:bg-bg-primary-dark px-2 py-1 rounded-xl"
+            className="text-md text-text-secondary-light dark:text-text-secondary-dark bg-bg-primary-light dark:bg-bg-primary-dark px-2 py-1 rounded-xl shadow-shadow-secondary-tag dark:shadow-shadow-secondary-dark-tag"
           >
             {tag}
           </span>
