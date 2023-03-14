@@ -11,7 +11,7 @@ const PostCard = ({ post }: { post: Post }) => {
   const { data, error } = useSWR<{
     views: number;
     likes: number;
-  }>(`/api/post/${post.slug}`, fetcher);
+  }>(inView ? `/api/post/${post.slug}` : null, fetcher);
 
   return (
     <Link
