@@ -2,7 +2,7 @@
 
 import { useTabs } from "lib/hooks/useTabs";
 import { useState } from "react";
-import { Blog, Home } from "./icons";
+import Icons from "components/icons";
 import { Spring } from "./Spring";
 
 const MenuToggle = () => {
@@ -12,13 +12,13 @@ const MenuToggle = () => {
         label: "Home",
         link: "/",
         id: "Home",
-        icon: <Home />,
+        icon: <Icons.Home />,
       },
       {
         label: "Blog",
         link: "/blog",
         id: "Blog",
-        icon: <Blog />,
+        icon: <Icons.Blog />,
       },
     ],
     initialTabId: "Triangle",

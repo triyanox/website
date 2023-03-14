@@ -1,9 +1,10 @@
 "use client";
 import classNames from "classnames";
 import Animations from "components/Animations";
-import { allPosts, Post } from "contentlayer/generated";
+import { allPosts } from "contentlayer/generated";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import utils from "utils";
 import PostCard from "./PostCard";
 
 const Posts = () => {
@@ -14,36 +15,6 @@ const Posts = () => {
     tags: [],
     search: "",
   });
-
-  const filterByTags = (tags: string[]) => {
-    return allPosts.filter((post) => {
-      return tags.every((tag) => post.tags.includes(tag));
-    });
-  };
-
-  const filterBySearch = (search: string) => {
-    return allPosts.filter((post) => {
-      return (
-        post.title.toLowerCase().includes(search.toLowerCase()) ||
-        post.description.toLowerCase().includes(search.toLowerCase())
-      );
-    });
-  };
-
-  function filter(posts: Post[], tags: string[], search: string) {
-    if (tags.length > 0) {
-      posts = filterByTags(tags);
-    }
-    if (search) {
-      posts = filterBySearch(search);
-    }
-    return posts;
-  }
-
-  function getUniqueTags() {
-    const tags = allPosts.map((post) => post.tags).flat();
-    return [...Array.from(new Set(tags))];
-  }
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -60,7 +31,7 @@ const Posts = () => {
           }}
         />
         <div className="w-full flex justify-start items-center gap-2 flex-wrap">
-          {getUniqueTags().map((tag) => (
+          {utils.getUniqueTags(allPosts).map((tag) => (
             <button
               key={tag}
               className={classNames(
@@ -85,7 +56,7 @@ const Posts = () => {
         </div>
       </div>
       <AnimatePresence mode="popLayout">
-        {!filter(allPosts, filters.tags, filters.search).length ? (
+        {!utils.filterPosts(allPosts, filters.tags, filters.search).length ? (
           <motion.div
             initial={{
               opacity: 0,
@@ -120,7 +91,8 @@ const Posts = () => {
           </motion.div>
         ) : (
           <Animations.PresenceContainer className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 py-8">
-            {filter(allPosts, filters.tags, filters.search)
+            {utils
+              .filterPosts(allPosts, filters.tags, filters.search)
               .sort(
                 (a, b) =>
                   new Date(b.date).getTime() - new Date(a.date).getTime()

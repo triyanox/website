@@ -1,26 +1,26 @@
 "use client";
 import Animations from "components/Animations";
-import { Backend, Design, Frontend } from "components/icons";
+import Icons from "components/icons";
 
 const SkillsList = [
   {
     id: "bd",
     title: "Backend Development",
-    icon: <Backend />,
+    icon: <Icons.Backend />,
     summary:
       "Looking for a powerful backend for your web application? With my expertise in Node.js, I can create a robust and scalable backend that will ensure your app runs smoothly and efficiently.",
   },
   {
     id: "fd",
     title: "Frontend Development",
-    icon: <Frontend />,
+    icon: <Icons.Frontend />,
     summary:
       "Need an intuitive and visually appealing user interface? With my skills in React front-end development, I can create stunning interfaces that will make your users fall in love with your product.",
   },
   {
     id: "ud",
     title: "UI/UX Design",
-    icon: <Design />,
+    icon: <Icons.Design />,
     summary:
       "Want to ensure your website is user-friendly and engaging? With my expertise in UI/UX design, I can create a seamless experience for your users that will keep them coming back for more.",
   },

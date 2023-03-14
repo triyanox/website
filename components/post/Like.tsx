@@ -1,8 +1,8 @@
 "use client";
-import { CheckMark, Heart } from "components/icons";
+import Icons from "components/icons";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
-import { AnimatePresence, motion } from "framer-motion";
 
 type LikeProps = {
   slug: string;
@@ -29,7 +29,7 @@ const Like = ({ slug }: LikeProps) => {
       transition={{ duration: 0.3 }}
       className="fixed bottom-8 right-0 z-50 mr-8 rounded-full px-3 py-3 transition-all duration-300 hover:scale-105 active:scale-95 md:mr-20 bg-bg-secondary-light dark:bg-bg-secondary-dark text-sm flex gap-2 items-center shadow-shadow-secondary dark:shadow-shadow-secondary-dark"
     >
-      <CheckMark />
+      <Icons.CheckMark />
       Thank you for liking!
     </motion.div>
   ) : (
@@ -38,7 +38,7 @@ const Like = ({ slug }: LikeProps) => {
       onClick={handleLike}
       className="fixed  bottom-8 right-0 z-50 mr-8 rounded-full px-3 py-3 transition-all duration-300 hover:scale-105 active:scale-95 md:mr-20 bg-bg-secondary-light dark:bg-bg-secondary-dark"
     >
-      <Heart />
+      <Icons.Heart />
     </button>
   );
 };

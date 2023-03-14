@@ -1,27 +1,27 @@
 "use client";
 import NextLink from "next/link";
-import { Github, Linkedin, Mail, Twitter } from "./icons";
+import Icons from "components/icons";
 import ToolTip from "./Tooltip";
 
 const LinkList = [
   {
     name: "Github",
-    icon: <Github />,
+    icon: <Icons.Github />,
     link: "https://github.com/triyanox",
   },
   {
     name: "Twitter",
-    icon: <Twitter />,
+    icon: <Icons.Twitter />,
     link: "https://twitter.com/ac__haq",
   },
   {
     name: "LinkedIn",
-    icon: <Linkedin />,
+    icon: <Icons.Linkedin />,
     link: "https://www.linkedin.com/in/mohamed-achaq/",
   },
   {
     name: "Email",
-    icon: <Mail />,
+    icon: <Icons.Mail />,
     link: "mailto:hi@achaq.dev",
   },
 ];

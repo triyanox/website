@@ -1,7 +1,7 @@
 "use client";
-import { Message, Resume } from "components/icons";
-import { LinkButton } from "../buttons";
+import Icons from "components/icons";
 import { motion } from "framer-motion";
+import { LinkButton } from "../buttons";
 
 const Hero = () => {
   return (
@@ -27,11 +27,11 @@ const Hero = () => {
         </h3>
         <div className="flex w-full justify-start items-center gap-4 py-4">
           <LinkButton href="mailto:hi@achaq.dev">
-            <Message />
+            <Icons.Message />
             Get in touch
           </LinkButton>
           <LinkButton href="/resume.pdf">
-            <Resume />
+            <Icons.Resume />
             Resume
           </LinkButton>
         </div>
