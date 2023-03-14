@@ -42,10 +42,9 @@ const Projects = () => {
           Here are some of my projects and open source contributions.
         </p>
       </div>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <Animations.StaggerContainerWithObserver className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {ProjectList.map((project) => (
-          <Animations.AnimateItem
-            variant="scaleUp"
+          <div
             key={project.id}
             className="flex h-full flex-col justify-satrt items-start gap-4 py-12 w-full px-6 bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary dark:shadow-shadow-secondary-dark rounded-2xl"
           >
@@ -86,9 +85,9 @@ const Projects = () => {
                 </span>
               ))}
             </div>
-          </Animations.AnimateItem>
+          </div>
         ))}
-      </div>
+      </Animations.StaggerContainerWithObserver>
     </section>
   );
 };

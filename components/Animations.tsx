@@ -171,6 +171,63 @@ const StaggerContainer = ({ children, className }: ContainerProps) => {
   );
 };
 
+const StaggerContainerWithObserver = ({
+  children,
+  className,
+}: ContainerProps) => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+    return () => {
+      controls.stop();
+    };
+  }, [controls, inView]);
+
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        hidden: {
+          transition: {
+            staggerChildren: 0.1,
+            duration: 0.5,
+          },
+        },
+        visible: {
+          transition: {
+            staggerChildren: 0.1,
+            duration: 0.5,
+          },
+        },
+      }}
+    >
+      {Children.map(children, (child, i) => (
+        <motion.div
+          variants={{
+            hidden: {
+              opacity: 0,
+              y: 20,
+            },
+            visible: {
+              opacity: 1,
+              y: 0,
+            },
+          }}
+        >
+          {child}
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+};
+
 const AnimateItem = ({ children, className, variant }: ItemProps) => {
   const controls = useAnimation();
   const [ref, inView] = useInView();
@@ -246,6 +303,7 @@ const Animations = {
   AnimateItem,
   PresenceContainer,
   PresenceItem,
+  StaggerContainerWithObserver,
 };
 
 export default Animations;
