@@ -30,9 +30,29 @@ function getUniqueTags(allPosts: Post[]) {
   return [...Array.from(new Set(tags))];
 }
 
+function moveToStart<T>(arr: T[], value: T) {
+  const index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+    arr.unshift(value);
+  }
+  return arr;
+}
+
+function moveToEnd<T>(arr: T[], value: T) {
+  const index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+    arr.push(value);
+  }
+  return arr;
+}
+
 const utils = {
   filterPosts,
   getUniqueTags,
+  moveToStart,
+  moveToEnd,
 };
 
 export default utils;

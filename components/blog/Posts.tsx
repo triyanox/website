@@ -2,8 +2,8 @@
 import classNames from "classnames";
 import Animations from "components/Animations";
 import { allPosts } from "contentlayer/generated";
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { AnimatePresence, motion, Reorder } from "framer-motion";
+import { useCallback, useState } from "react";
 import utils from "utils";
 import PostCard from "./PostCard";
 
@@ -11,10 +11,27 @@ const Posts = () => {
   const [filters, setFilters] = useState<{
     tags: string[];
     search: string;
+    allTags: string[];
   }>({
     tags: [],
     search: "",
+    allTags: utils.getUniqueTags(allPosts),
   });
+
+  const handleSelect = useCallback(
+    (tag: string) => {
+      setFilters({
+        ...filters,
+        tags: filters.tags.includes(tag)
+          ? filters.tags.filter((t) => t !== tag)
+          : [...filters.tags, tag],
+        allTags: !filters.tags.includes(tag)
+          ? utils.moveToStart(filters.allTags, tag)
+          : utils.moveToEnd(filters.allTags, tag),
+      });
+    },
+    [filters]
+  );
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -30,32 +47,46 @@ const Posts = () => {
             });
           }}
         />
-        <div className="w-full flex justify-start items-center gap-2 flex-wrap">
-          {utils.getUniqueTags(allPosts).map((tag) => (
-            <button
-              key={tag}
+        <Reorder.Group
+          className="w-full flex justify-start items-center gap-2 flex-wrap"
+          as="div"
+          axis="x"
+          values={filters.allTags}
+          onReorder={(newOrder) => {
+            setFilters({
+              ...filters,
+              allTags: newOrder,
+            });
+          }}
+        >
+          {filters.allTags.map((tag) => (
+            <Reorder.Item
+              as="button"
+              value={tag}
+              key={filters.allTags.indexOf(tag)}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
               className={classNames(
-                "text-lg text-text-secondary-light dark:text-text-secondary-dark px-2 py-1 rounded-xl",
+                "text-lg cursor-pointer text-text-secondary-light dark:text-text-secondary-dark px-2 py-1 rounded-xl",
                 {
-                  "bg-bg-secondary-light dark:bg-bg-secondary-dark font-bold":
+                  "bg-bg-secondary-light dark:bg-bg-secondary-dark font-bold shadow-shadow-secondary dark:shadow-shadow-secondary-dark":
                     filters.tags.includes(tag),
                 }
               )}
-              onClick={() => {
-                setFilters({
-                  ...filters,
-                  tags: filters.tags.includes(tag)
-                    ? filters.tags.filter((t) => t !== tag)
-                    : [...filters.tags, tag],
-                });
-              }}
+              onClick={handleSelect.bind(null, tag)}
             >
               #{tag}
-            </button>
+            </Reorder.Item>
           ))}
-        </div>
+        </Reorder.Group>
       </div>
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence mode="wait">
         {!utils.filterPosts(allPosts, filters.tags, filters.search).length ? (
           <motion.div
             initial={{
