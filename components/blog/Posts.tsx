@@ -58,19 +58,37 @@ const Posts = () => {
               allTags: newOrder,
             });
           }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {
+              transition: {
+                staggerChildren: 0.1,
+                duration: 0.5,
+              },
+            },
+            visible: {
+              transition: {
+                staggerChildren: 0.1,
+                duration: 0.5,
+              },
+            },
+          }}
         >
           {filters.allTags.map((tag) => (
             <Reorder.Item
               as="button"
               value={tag}
               key={filters.allTags.indexOf(tag)}
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
+              variants={{
+                hidden: {
+                  opacity: 0,
+                  y: 20,
+                },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                },
               }}
               className={classNames(
                 "text-lg cursor-pointer text-text-secondary-light dark:text-text-secondary-dark px-2 py-1 rounded-xl",
