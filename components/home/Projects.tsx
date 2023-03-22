@@ -6,6 +6,14 @@ import NextLink from "next/link";
 
 const ProjectList = [
   {
+    id: "pgbar",
+    title: "pgbar",
+    summary: "A minimal progress bar written in rust",
+    github: "https://github.com/triyanox/pgbar",
+    package: "https://crates.io/crates/pgbar",
+    tags: ["rust"],
+  },
+  {
     id: "lyrol",
     title: "lyrol",
     summary: "A fully featured role management library for node.js",
