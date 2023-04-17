@@ -14,11 +14,11 @@ const ProjectList = [
     tags: ["rust"],
   },
   {
-    id: "lyrol",
-    title: "lyrol",
-    summary: "A fully featured role management library for node.js",
-    github: "https://github.com/triyanox/lyrol",
-    package: "https://www.npmjs.com/package/lyrol",
+    id: "iamjs",
+    title: "iamjs",
+    summary: "A fully featured library for easy authorization",
+    github: "https://github.com/triyanox/iamjs",
+    package: "https://www.npmjs.com/org/iamjs",
     tags: ["node.js", "typescript", "mongodb", "express", "react"],
   },
   {
