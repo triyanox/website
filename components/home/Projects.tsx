@@ -18,7 +18,7 @@ const ProjectList = [
     title: "iamjs",
     summary: "A fully featured library for easy authorization",
     github: "https://github.com/triyanox/iamjs",
-    package: "https://www.npmjs.com/org/iamjs",
+    package: "https://iamjs.achaq.dev",
     tags: ["node.js", "typescript", "mongodb", "express", "react"],
   },
   {
