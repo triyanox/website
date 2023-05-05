@@ -49,7 +49,7 @@ module.exports = {
       },
       boxShadow: {
         "shadow-primary": "0px 0px 20px rgba(0, 0, 0, 0.5)",
-        "shadow-secondary": "0px 0px 20px rgba(0, 0, 0, 0.1)",
+        "shadow-secondary": "0px 0px 20px rgba(0, 0, 0, 0.05)",
         "shadow-primary-dark": "0px 0px 20px rgba(255, 255, 255, 0.5)",
         "shadow-secondary-dark": "0px 0px 20px rgba(255, 255, 255, 0.1)",
         "shadow-secondary-tag": "0px 0px 20px rgba(0, 0, 0, 0.05)",
