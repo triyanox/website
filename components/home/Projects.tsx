@@ -6,12 +6,12 @@ import NextLink from "next/link";
 
 const ProjectList = [
   {
-    id: "pgbar",
-    title: "pgbar",
-    summary: "A minimal progress bar written in rust",
-    github: "https://github.com/triyanox/pgbar",
-    package: "https://crates.io/crates/pgbar",
-    tags: ["rust"],
+    id: "quikc",
+    title: "quikc",
+    summary: "Easy caching for your Node.js applications",
+    github: "https://github.com/triyanox/quikc",
+    package: "https://www.npmjs.com/org/quikc",
+    tags: ["node.js", "typescript", "express", "redis"],
   },
   {
     id: "iamjs",
@@ -20,6 +20,22 @@ const ProjectList = [
     github: "https://github.com/triyanox/iamjs",
     package: "https://iamjs.achaq.dev",
     tags: ["node.js", "typescript", "mongodb", "express", "react"],
+  },
+  {
+    id: "shinu",
+    title: "shinu",
+    summary: "Elegant Process Exception Handling",
+    github: "https://github.com/triyanox/shinu",
+    package: "https://www.npmjs.com/package/shinu",
+    tags: ["node.js", "typescript"],
+  },
+  {
+    id: "pgbar",
+    title: "pgbar",
+    summary: "A minimal progress bar written in rust",
+    github: "https://github.com/triyanox/pgbar",
+    package: "https://crates.io/crates/pgbar",
+    tags: ["rust"],
   },
   {
     id: "rscrypt",
