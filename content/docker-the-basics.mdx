@@ -5,208 +5,147 @@ description: "Learn the basics of Docker and Containers"
 tags: ["docker", "containers", "devops"]
 ---
 
-In this blog post we will going to talk about the basics of Docker and Containers.
-
 ## Docker
 
-Docker is a containerization technology that allows you to run applications on a virtual machine.
-When you're deploying an application the old way you're using a virtual machine on the cloud or on your own hardware, and inside
-this virtual machine you're running the application with the required runtime and dependencies and additional libraries, but with this way
-of doing things you're using a lot of resources, and at scale you're going to have a lot of these virtual machines running at the same time, so
-you will going to have lot of scalability issues.
-And that were docker comes to the rescue.
+Docker is a powerful containerization technology that enables the development and deployment of applications in a consistent and isolated environment. Unlike traditional virtual machines, which require a separate operating system for each instance, Docker containers share the host system's kernel, making them lightweight and efficient.
 
-Essentially, Docker to replicate environments using containers.
-To make a container you will need an image, which is a bleuprint of the container you want to create, to simplify things an image is like a class
-and you will use this class to create multiple instances of the same container.
+### Advantages of Docker
 
-And using Docker you don't have to deal with all the junk added by virtualized operating systems that may consume a lot of resources,
-and you can be free of the **worked on my machine syndrome** , and you can easlly create the environment needed to run your application.
+1. **Resource Efficiency**: Docker containers are more lightweight compared to virtual machines, as they do not require a separate operating system. This leads to better utilization of system resources, allowing you to run more containers on the same host machine.
 
-## Dockerfile
+2. **Isolation**: Containers provide a high level of isolation between applications and their dependencies. Each container has its own file system, network interfaces, and process space, ensuring that changes made to one container do not affect others.
 
-To create this images we talked about you will need a Dockerfile, which is a file that describes the steps to create the image.
-To create this Dockerfile simply create a file called Dockerfile in the root of your project, and write the steps you want to follow to create an image for your application.
+3. **Portability**: Docker containers are highly portable, meaning you can run them on any system that has Docker installed, regardless of the underlying operating system. This makes it easier to develop and deploy applications across different environments.
 
-## Create an image
+4. **Scalability**: Docker makes it simple to scale applications horizontally by allowing you to easily create multiple instances of a container and distribute the workload across them. Containers can be quickly started, stopped, or replicated to meet the changing demands of your application.
 
-To build your first image clone this repo by running the following command:
+5. **Version Control**: Docker enables version control for your application's dependencies by using container images. Images serve as blueprints for creating containers and can be versioned, tagged, and shared, ensuring consistent deployments across different stages of the application's lifecycle.
 
-```
-git clone https://github.com/triyanox/flask-docker-boilerplate.git
-```
+### Dockerfile
 
-This is just a simple server made with Flask, and it's a simple example of how to create an image.
-In the root folder you will find the main application
+To create a Docker image, you need to define a Dockerfile. A Dockerfile is a text file that contains a series of instructions to build an image. These instructions specify the base image, install dependencies, copy files, set environment variables, and define runtime commands.
 
-```py:app.py
-from flask import Flask
+Using a Dockerfile, you can automate the process of creating a reproducible and self-contained image that includes all the necessary components for your application to run.
 
-app = Flask(__name__)
+### Creating an Image
 
-@app.route("/")
-def hello():
-    return "hello world This is Mohamed Achaq!"
+Let's walk through an example of creating a Docker image for a Flask application:
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
-
-```
-
-and the Dockerfile
-
-```:Dockerfile
+```Dockerfile
 FROM python:3.8.9-alpine
-RUN pip install flask
-COPY app.py /app.py
-CMD ["python","app.py"]
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["python", "app.py"]
 ```
 
-The Dockerfile is made of layers of commands, and the layers run in order from top to bottom, so it's a better practice to make sure that the commands that maight change frequently are at the bottom of the Dockerfile to take advantage of caching.
+In this example:
 
-in this Dockerfile we have the following layers or commands:
+- `FROM python:3.8.9-alpine` sets the base image as Python 3.8.9 on Alpine Linux, which provides a minimal and lightweight environment.
 
-- FROM python:3.8.9-alpine:
-  This were your Dockerfile will start executing from. Every Dockerfile must start with a **FROM** line that is the starting image to build your layers on top of. In this case, we are selecting the Python 3.8.9-alpine image.
-  Alpine means that it uses the alpine distribution, which is significantly smaller than an alternative flavor of Linux. A smaller image means it will download (deploy) much faster, and it also has advantages for security because it has a smaller attack surface.
+- `WORKDIR /app` sets the working directory within the container to `/app`.
 
-- RUN pip install flask
-  This is a command that will install the Flask library on your image.
-  And the **RUN** command is a command that will executes commands needed to set up your image for your application, such as installing packages, editing files, or changing file permissions.
-- COPY app.py /app.py
-  This is a command that will copy the app.py file to the /app.py file inside the image.
-  The **COPY** command is a command that will copy files from one location to another.
-- CMD ["python","app.py"]
-  This is a command that will execute the app.py file inside the image.
-  The **CMD** command is a command that will execute a command in the image.
+- `COPY requirements.txt .` copies the `requirements.txt` file from the host to the container's working directory.
 
-## Build an image
+- `RUN pip install --no-cache-dir -r requirements.txt` installs the dependencies specified in `requirements.txt` using pip.
 
-Before going any further you need to install Docker on your machine.
+- `COPY . .` copies the remaining application code from the host to the container's working directory.
 
-To build your image you need to run the following command:
+- `CMD ["python", "app.py"]` specifies the command to run when the container is started.
 
-```bash:terminal
+### Building an Image
+
+To build the Docker image using the Dockerfile, run the following command in the directory containing the Dockerfile:
+
+```bash
 docker build -t flask-docker-boilerplate .
 ```
 
-Then verify that the image was created by running the following command:
+The `-t` flag allows you to tag the image with a name (`flask-docker-boilerplate` in this example) for easier reference.
 
-```bash:terminal
-docker image ls
-```
+### Running a Container
 
-## Run an image
+To run a container based on the created image, use the `docker run` command:
 
-To run this image you need to run the following command:
-
-```bash:terminal
+```bash
 docker run -p 3000:5000 flask-docker-boilerplate
 ```
 
-First let's discuss this command.
-**docker run** is a command that will run a Docker image.
-we use the **-p** flag to tell Docker to expose a port on the host machine to the container.
-**3000** is the port that we want to expose on the host machine, and **5000** is the port that we want to expose on the container.
+The `-p` flag maps the container's port 5000 to the host's port 3000, allowing access to the Flask application
 
-Now head over to your browser and go to http://localhost:3000/ and you should see the following message:
+ running inside the container.
 
-```html:html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-  <h1>hello world This is Mohamed Achaq!</h1>
-</body>
-</html>
+### Logging
+
+To view the logs of a running container, you can use the `docker logs` command:
+
+```bash
+docker logs <container_id or container_name>
 ```
 
-## Check out the logs of the container
+This will display the logs generated by the container's application.
 
-To check out the logs of the container you need to run the following command:
+### DockerHub
 
-```bash:terminal
-docker container log flask-docker-boilerplate
-```
+[Docker Hub](https://hub.docker.com/) is a central registry that allows you to store, share, and distribute Docker images with the community. It serves as a platform for collaborating on container-based projects and simplifying the deployment process.
 
-## DockerHub
+To push your Docker image to Docker Hub, follow these steps:
 
-[Docker Hub website](https://hub.docker.com/) is a website that allows you to share your Docker images with the community, and this type of services known as **registries** or **central registries**, and you can integrate them in you CI/CD
-pipeline just like you integrate your GitHub repository.
+1. Create a Docker Hub account at [https://hub.docker.com/](https://hub.docker.com/).
 
-To push your image to Docker Hub you need to follow the following steps:
+2. Log in to Docker Hub using the `docker login` command:
 
-### Create a Docker Hub account
+   ```bash
+   docker login
+   ```
 
-First head over to the [Docker Hub website](https://hub.docker.com/) create an account .
+   Enter your Docker Hub username and password when prompted.
 
-### Login to Docker Hub
+3. Tag your local image with your Docker Hub username and repository name:
 
-Then you need to login to Docker Hub by running the following command:
+   ```bash
+   docker tag flask-docker-boilerplate <your_docker_hub_username>/flask-docker-boilerplate:latest
+   ```
 
-```bash:terminal
-docker login
-```
+   This command associates your image with a specific repository on Docker Hub.
 
-Then you will be asked to enter your username and password.
+4. Push the image to Docker Hub:
 
-### Tag your image
+   ```bash
+   docker push <your_docker_hub_username>/flask-docker-boilerplate:latest
+   ```
 
-Then you need to tag your image with the name of your project and the version of your application.
+   This uploads the image to your Docker Hub repository.
 
-```bash:terminal
-docker tag flask-docker-boilerplate [your_docker_hub_username]/flask-docker-boilerplate:latest
-```
+### Deploying Changes
 
-### Push your image to Docker Hub
+To deploy changes to your application, follow these steps:
 
-Finally you need to push your image to Docker Hub.
+1. Modify your application's code, such as the Flask route or the message it displays.
 
-```bash:terminal
-docker push [your_docker_hub_username]/flask-docker-boilerplate:latest
-```
+2. Rebuild the Docker image:
 
-## Deploy changes
+   ```bash
+   docker build -t flask-docker-boilerplate .
+   ```
 
-Let's change the message on the page to "hello world" from "hello world This is Mohamed Achaq!".
+3. Push the updated image to Docker Hub:
 
-```py {5-11}:app.py
-from flask import Flask
+   ```bash
+   docker push <your_docker_hub_username>/flask-docker-boilerplate:latest
+   ```
 
-app = Flask(__name__)
+   This ensures that the latest version of your application is available for deployment.
 
-@app.route("/")
-def hello():
-    return "hello world !"
+### Caching Mechanism
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+Docker uses a caching mechanism to speed up the image building process. Each instruction in the Dockerfile creates a layer in the image. If a layer has not changed, Docker will reuse the cached layer instead of rebuilding it.
 
-```
+To take advantage of caching, it is recommended to order the instructions in the Dockerfile from least frequently changing to most frequently changing. This way, Docker can reuse as many cached layers as possible during subsequent builds, saving time and resources.
 
-Then rebuild the image by using the following command:
+### Conclusion
 
-```bash:terminal
-docker build -t flask-docker-boilerplate .
-```
+Docker simplifies the development, deployment, and management of applications by providing a lightweight and portable containerization platform. It allows you to package your application and its dependencies into a single unit, ensuring consistency across different environments.
 
-Then push the image to Docker Hub by using the following command:
-
-```bash:terminal
-docker push [your_docker_hub_username]/flask-docker-boilerplate:latest
-```
-
-## Caching mechanism
-
-Docker images have a caching mechanism that allows them to be cached on the host machine, and this mechanism is used to speed up the deployment of your application.
-Remember the layers of commands that are at the bottom of the Dockerfile?
-Everytime you commit a change to those commands you will not going to rebuild the image from scratch but instead you will be using the cached image and the changes will be applied to the cached image.
-
-## Finnaly
-
-Finally I hope that you've enjoyed this blog post and if you have any questions or comments or suggestions feel free to contact me at [contact@achaq.dev](mailto:contact@achaq.dev).
+By understanding the basics of Docker, such as Dockerfiles, image building, running containers, and utilizing Docker Hub, you can leverage the power of containerization to enhance your software development workflow and streamline deployment processes.
