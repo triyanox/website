@@ -5,33 +5,25 @@ description: "Learn how to write a compiler in Rust"
 tags: ["rust", "compilers", "llvm"]
 ---
 
-Hello and welcome to a new blog post !
+Hello and welcome to a new blog post!
+
 Today we will talk about compilers and how you can write one in Rust.
 
 # Programming Languages
 
-There is two types of programming languages, complied and interpreted.
-Programs written in compiled languages need to be compiled before they can be run as a binary on a computer and
-programs written in interpreted languages are run directly on a computer by using a just in time compilation (JIT).
-Examples of compiled languages are C, C++, Java, C#, Go, etc.
-Examples of interpreted languages are Python, Ruby, JavaScript, etc.
+There are two types of programming languages: compiled and interpreted. Programs written in compiled languages need to be compiled before they can be run as a binary on a computer, while programs written in interpreted languages are run directly on a computer using just-in-time compilation (JIT). Examples of compiled languages include C, C++, Java, C#, Go, etc., while examples of interpreted languages include Python, Ruby, JavaScript, etc.
 
 # Compilers
 
-The compiler is just a program that takes a human readable programming language and converts it to machine code to be
-understandable by the computer, we all know that the computer can only understand zeros and ones, so how the compiler
-actually works ?
+A compiler is a program that takes a human-readable programming language and converts it to machine code that can be understood by the computer. As we know, computers can only understand zeros and ones, so how does a compiler actually work?
 
 # LLVM
 
-You may have heard of **LLVM**, which is a tool that simplifies the process of making compilers, it's written in C++, and provides a collection of modular and reusable compiler and toolchain technologies.
-**LLVM** is a middle layers of a complete compiler system, taking intermediate representation (IR) code from a compiler and emitting an optimized IR. This new IR can then be converted
-and linked into machine-dependent assembly language code for a target platform.
-In this article I'm not going to talk about **LLVM** instad we will talk about the fondamental of compilers, and I will provide some examples of how to write some part of a compiler in Rust.
+You may have heard of **LLVM**, which is a tool that simplifies the process of building compilers. It is written in C++ and provides a collection of modular and reusable compiler and toolchain technologies. LLVM serves as the middle layer of a complete compiler system, taking intermediate representation (IR) code from a compiler and emitting optimized IR. This new IR can then be converted and linked into machine-dependent assembly language code for a target platform. While LLVM is a powerful and widely-used tool in the compiler world, in this article, we will focus on the fundamentals of compilers and provide examples of how to write parts of a compiler in Rust.
 
-# The compiler
+# The Compiler
 
-A simple compiler can be broken down into 3 main parts :
+A simple compiler can be broken down into three main parts:
 
 1. **A Parser (or Lexer)**
 2. **A Transformer**
@@ -39,30 +31,23 @@ A simple compiler can be broken down into 3 main parts :
 
 ## The Parser
 
-The parser is the part of the compiler that tokenize the code and convert it to a list of tokens.
+The parser is the part of the compiler that tokenizes the code and converts it into a list of tokens.
 
-The **Tokenzation** or **Lexical Analysis** is the process of breaking down a program into a list of tokens, each token is a small single unit of
-code that the compiler can understand, for example, here is a simple Rust program :
+Tokenization, also known as lexical analysis, is the process of breaking down a program into a list of tokens. Each token is a small, single unit of code that the compiler can understand. Let's take a look at a simple Rust program:
 
-```Rust:main.rs
+```Rust
 fn main() {
     println!("Hello, world!");
 }
 ```
 
-This is a simple Rust program, it has a function named main, and inside the function there is a println! macro,
-that prints the string "Hello, world!" to the console.
-After the tokenzation, the program will be broken down into a list of tokens, **fn** is a function keyword, **main** is
-the name of the function, and the parentheses are the opening and closing parentheses of the function, the
-opening curly brace, the closing curly brace, **println** is the println macro, and the parentheses are
-the opening and closing parentheses of the macro.
+In this Rust program, we have a function named `main`, and inside the function, there is a `println!` macro that prints the string "Hello, world!" to the console. After tokenization, the program will be broken down into a list of tokens. For example, `fn` is a function keyword, `main` is the name of the function, and the parentheses are the opening and closing parentheses of the function. Similarly, the opening and closing curly braces, `println` is the `println` macro, and the parentheses are the opening and closing parentheses of the macro.
 
-After tokenizing the code the parser will convert the list of tokens into a tree of nodes, called an Abstract Syntax Tree (AST),
-which is an abstract representation of the code, this step called **Syntactic Analysis**.
+After tokenizing the code, the parser converts the list of tokens into a tree of nodes called an Abstract Syntax Tree (AST). The AST is an abstract representation of the code. This step is called syntactic analysis.
 
-The AST of the program above will look something like this like this :
+The AST for the program above will look something like this:
 
-```Rust:AST
+```Rust
 AST {
     kind: "Program",
     children: [
@@ -97,35 +82,32 @@ AST {
 
 ## The Transformer
 
-After parsing the code we will have an AST, but the AST is not enough to be understood by the computer, it's also
-a deeply nested structure, so we need to transform the AST into a more readable structure, called a **Syntax Tree**.
+After parsing the code, we have an AST. However, the AST is not easily understandable by the computer, and it is also a deeply nested structure. Therefore, we need to transform the AST into a
 
-The Transformer can be broken down into 2 main parts or functions :
+ more readable structure called a **Syntax Tree**.
+
+The Transformer can be broken down into two main parts or functions:
 
 1. **Traversers**
 2. **Visitors**
 
-The **Traversers** are functions that traverse the AST in a depth-first maner.
+The Traversers are functions that traverse the AST in a depth-first manner. For example, in the AST mentioned above, the Traverser will apply a function to the root node (Program node) and then apply the function to its children, and so on, until it reaches the last child.
 
-For example in the above AST, the Traverser will apply the function to the root node which is the Program node, then
-it will apply the function to the children of the Program node, and so on, until it reaches the last child.
+A Traverser function can be implemented using the Visitor pattern, which is a pattern that allows you to implement a function that works on a node and its children and then apply the function to the node and its children.
 
-A Traverser function can be implemented by using the **Visitor** pattern, which is a pattern that allows you to
-implement a function that works on a node and its children, and then apply the function to the node and its children,
+Visitors are usually objects with methods that accept a node and return a value. Let's implement a simple Transformer that takes an AST and transforms it into a syntax tree by passing it to a Traverser.
 
-The **Visitors** usually are objects with methods that accapt a node and return a value.
-Let's implement a simple Transformer that takes an AST and transform it into a syntax tree by passing it to a Traverser.
-
-```Rust:main.rs
-// this is a simple example to explain the visitor pattern
+```Rust
 use std::collections::HashMap;
 
 struct Visitor {
     nodes: HashMap<String, String>
 }
+
 struct Traverser {
     visitor: Visitor
 }
+
 struct Node {
     kind: String,
     children: Vec<Node>
@@ -137,12 +119,12 @@ impl Visitor {
             nodes: HashMap::new()
         }
     }
+
     fn visit(&mut self, node: &Node) {
         self.nodes.insert(node.kind.clone(), node.kind.clone());
         for child in &node.children {
             self.visit(child);
         }
-        return self.nodes;
     }
 }
 
@@ -156,35 +138,32 @@ impl Traverser {
     fn traverse(&mut self, node: &Node) {
         self.visitor.visit(node);
     }
-
 }
 
 struct SyntaxTree {
-   kind : String,
-   body : Vec<Node>
+   kind: String,
+   body: Vec<Node>
 }
 
-fn Transformer (AST : &AST) -> SyntaxTree {
+fn Transformer(AST: &AST) -> SyntaxTree {
     let mut syntax_tree = SyntaxTree {
         kind: "Program".to_string(),
         body: Vec::new()
     };
     let mut traverser = Traverser::new();
-    let ast_context = traverser.visitor.visit(AST);
-    syntax_tree.body = ast_context.clone();
-    return syntax_tree;
+    traverser.traverse(AST);
+    syntax_tree.body = traverser.visitor.nodes.clone();
+    syntax_tree
 }
 ```
 
 ## The Code Generator
 
-The Code Generator is the part of the compiler that generate the machine code from the syntax tree,
-the code generator call it's self recursively to generate the code from the syntax tree into one single
-string, this string is the machine code.
+The Code Generator is the part of the compiler that generates machine code from the syntax tree. The code generator calls itself recursively to generate the code from the syntax tree into a single string, which represents the machine code.
 
-Here is an example of how you can implement the code generator function in Rust :
+Here is an example of how you can implement the code generator function in Rust:
 
-```Rust:main.rs
+```Rust
 fn generate_code(syntax_tree: &SyntaxTree) -> String {
     let mut code = String::new();
     match syntax_tree.kind.as_str() {
@@ -221,7 +200,9 @@ fn generate_code(syntax_tree: &SyntaxTree) -> String {
         },
         "String" => {
             code.push_str("\"");
-            code.push_str(&syntax_tree.body[0].kind);
+            code.push_str
+
+(&syntax_tree.body[0].kind);
             code.push_str("\"");
         },
         "Identifier" => {
@@ -231,20 +212,19 @@ fn generate_code(syntax_tree: &SyntaxTree) -> String {
             code.push_str("<unknown>");
         }
     }
-    return code;
+    code
 }
-
 ```
 
-After implementing the parser, the transformer and the code generator, you can use composition
-to tie everything together, and here we go you made your own compiler.
+After implementing the parser, the transformer, and the code generator, you can use composition to tie everything together, and voila, you have your own compiler.
 
 # Conclusion
 
-Compiler are very essential tools in programming, they're been arround forever, you don't need to
-know how to write a compiler, but learning how compilers work helps you understand your tools better.
+Compilers are essential tools in programming, and while you don't necessarily need to know how to write a compiler, learning how compilers work can help you understand your tools better and improve your overall programming skills.
 
 # Useful Links
 
 - [The Compiler](https://en.wikipedia.org/wiki/Compiler)
 - [LLVM](https://llvm.org/)
+
+I hope this enhanced article provides a clearer understanding of compilers and their components. Let me know if you have any further questions!
