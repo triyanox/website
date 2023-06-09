@@ -30,10 +30,6 @@ const Hero = () => {
             <Icons.Message />
             Get in touch
           </LinkButton>
-          <LinkButton href="/resume.pdf">
-            <Icons.Resume />
-            Resume
-          </LinkButton>
         </div>
       </div>
     </section>
