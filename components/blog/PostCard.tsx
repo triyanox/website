@@ -18,7 +18,7 @@ const PostCard = ({ post }: { post: Post }) => {
       ref={ref}
       href={`/blog/${post.slug}`}
       key={post._id}
-      className="w-full flex h-full justify-center items-start gap-2 flex-col px-6 py-8 rounded-2xl bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary dark:shadow-shadow-secondary-dark"
+      className="w-full flex h-full justify-start items-start gap-2 flex-col px-6 py-8 rounded-2xl bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary dark:shadow-shadow-secondary-dark"
     >
       <h3 className="text-2xl font-semibold">{post.title}</h3>
       <div className="flex w-full items-center justify-start gap-2 text-xs md:text-sm text-text-secondary-light dark:text-text-secondary-dark">
