@@ -119,9 +119,18 @@ const Posts = () => {
             transition={{
               duration: 0.5,
             }}
-            className="w-full flex justify-center items-center gap-8 flex-col py-16"
+            className={classNames(
+              "w-full flex justify-center items-center gap-8 flex-col py-16",
+              {
+                "py-48": !utils.filterPosts(
+                  allPosts,
+                  filters.tags,
+                  filters.search
+                ).length,
+              }
+            )}
           >
-            <h1 className="text-4xl font-bold text-text-primary-light dark:text-text-primary-dark">
+            <h1 className="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark">
               No posts found
             </h1>
 
