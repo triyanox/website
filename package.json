@@ -39,7 +39,8 @@
     "remark-gfm": "^3.0.1",
     "resize-observer-polyfill": "^1.5.1",
     "swr": "^2.1.0",
-    "typescript": "4.9.5"
+    "typescript": "4.9.5",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",

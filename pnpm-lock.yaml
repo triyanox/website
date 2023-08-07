@@ -98,6 +98,9 @@ dependencies:
   typescript:
     specifier: 4.9.5
     version: 4.9.5
+  zod:
+    specifier: ^3.21.4
+    version: 3.21.4
 
 devDependencies:
   '@tailwindcss/typography':
