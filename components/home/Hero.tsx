@@ -10,13 +10,13 @@ const Hero = () => {
         initial={{ scale: 0, y: 100, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-gradient-to-br from-[#00B4DB] via-[#0083B0] to-[#3A00FF] w-24 h-24 rounded-full animate-gradient-xy shadow-shadow-primary dark:shadow-shadow-primary-dark"
+        className="bg-gradient-to-br from-[#00B4DB] via-[#0083B0] to-[#3A00FF] w-24 h-24 rounded-full animate-gradient-xy shadow-shadow-secondary dark:shadow-none"
       />
       <div className="flex flex-col justify-center items-satrt gap-4 py-8 w-full">
-        <h1 className="text-3xl md:text-5xl text-text-primary-light dark:text-text-primary-dark font-bold">
+        <h1 className="text-3xl md:text-5xl text-text-primary-light dark:text-text-primary-dark font-semibold">
           Mohamed Achaq
         </h1>
-        <h3 className="text-xl text-text-secondary-light dark:text-text-secondary-dark font-medium">
+        <h3 className="text-xl text-text-secondary-light dark:text-text-secondary-dark">
           I&apos;m a software engineer based in Morocco, with a passion for
           coding and problem-solving. I have a solid background in computer
           science and extensive experience in developing software applications

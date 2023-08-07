@@ -1,4 +1,3 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
 /** @type {import('tailwindcss').Config} */
@@ -11,9 +10,6 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["Wright Pro", ...fontFamily.sans],
-      },
       colors: {
         "bg-primary-light": "#fff",
         "bg-primary-dark": "#000",
@@ -49,10 +45,10 @@ module.exports = {
       },
       boxShadow: {
         "shadow-primary": "0px 0px 20px rgba(0, 0, 0, 0.5)",
-        "shadow-secondary": "0px 0px 20px rgba(0, 0, 0, 0.05)",
+        "shadow-secondary": "0px 0px 20px rgba(0, 0, 0, 0.02)",
         "shadow-primary-dark": "0px 0px 20px rgba(255, 255, 255, 0.5)",
         "shadow-secondary-dark": "0px 0px 20px rgba(255, 255, 255, 0.1)",
-        "shadow-secondary-tag": "0px 0px 20px rgba(0, 0, 0, 0.05)",
+        "shadow-secondary-tag": "0px 0px 20px rgba(0, 0, 0, 0.09)",
         "shadow-secondary-dark-tag": "0px 0px 20px rgba(255, 255, 255, 0.05)",
       },
       animation: {

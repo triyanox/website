@@ -17,106 +17,6 @@ button:focus {
   outline: none;
 }
 
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-BoldIt.woff2") format("woff2");
-  font-weight: bold;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-ExtraBold.woff2") format("woff2");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-RegularIt.woff2") format("woff2");
-  font-weight: normal;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-ExtraBoldIt.woff2") format("woff2");
-  font-weight: bold;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-Bold.woff2") format("woff2");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-ThinIt.woff2") format("woff2");
-  font-weight: 100;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-Thin.woff2") format("woff2");
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-Regular.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-SemiBoldIt.woff2") format("woff2");
-  font-weight: 600;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-LightIt.woff2") format("woff2");
-  font-weight: 300;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Wright Pro";
-  src: url("/fonts/WrightPro-Light.woff2") format("woff2");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-pre {
-  font-family: "Wright Pro", monospace;
-}
-
 .token.comment,
 .token.prolog,
 .token.doctype,
@@ -191,7 +91,7 @@ pre {
 }
 
 .rehype-code-title {
-  @apply rounded-t-3xl bg-bg-secondary-light px-5 py-3 text-lg font-bold text-text-primary-light first-letter:uppercase dark:bg-bg-secondary-dark dark:text-text-primary-dark;
+  @apply rounded-t-3xl bg-bg-secondary-light px-5 py-3 text-lg font-semibold text-text-primary-light first-letter:uppercase dark:bg-bg-secondary-dark dark:text-text-primary-dark;
 }
 
 .rehype-code-title + pre {
