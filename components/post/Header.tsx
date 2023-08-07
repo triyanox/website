@@ -2,8 +2,9 @@
 import { Loading } from "components/Loading";
 import { Post } from "contentlayer/generated";
 import fetcher from "lib/fetcher";
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import useSWR from "swr";
+import { Heart, Show } from "react-iconly";
 
 const Header = ({ post }: { post: Post }) => {
   const { data, error } = useSWR<{
@@ -24,10 +25,10 @@ const Header = ({ post }: { post: Post }) => {
   }, [post.slug]);
 
   return (
-    <section className="w-full flex justify-center items-start flex-col py-8 md:py-16 gap-4">
-      <div className="w-full flex flex-col justify-center items-start xl:flex-row xl:justify-between xl:items-center">
-        <h1 className="text-3xl xl:text-5xl">{post.title}</h1>
-        <div className="flex justify-end items-center gap-2 px-8 py-2 rounded-2xl bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary dark:shadow-shadow-secondary-dark">
+    <Fragment>
+      <div className="w-full flex flex-col lg:flex-row lg:justify-between lg:items-center gap-2 lg:gap-4 py-8">
+        <h1 className="text-5xl">{post.title}</h1>
+        <div className="flex w-fit lg:min-w-fit justify-start lg:justify-end items-center gap-2 px-8 py-2 rounded-2xl bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary dark:shadow-shadow-secondary-dark">
           <p className="text-xs sm:text-sm md:text-lg font-medium text-text-secondary-light dark:text-text-secondary-dark">
             {new Date(post.date).toLocaleDateString("en-US", {
               year: "numeric",
@@ -39,17 +40,31 @@ const Header = ({ post }: { post: Post }) => {
             •
           </p>
           <p className="text-xs sm:text-sm md:text-lg font-medium text-text-secondary-light dark:text-text-secondary-dark">
-            {!data && !error ? <Loading /> : data?.views + " views"}
+            {!data && !error ? (
+              <Loading />
+            ) : (
+              <div className="flex gap-1 items-center justify-center">
+                {data?.views}
+                <Show set="two-tone" />
+              </div>
+            )}
           </p>
           <p className="text-xs sm:text-sm md:text-lg font-medium text-text-secondary-light dark:text-text-secondary-dark">
             •
           </p>
           <p className="text-xs sm:text-sm md:text-lg font-medium text-text-secondary-light dark:text-text-secondary-dark">
-            {!data && !error ? <Loading /> : data?.likes + " likes"}
+            {!data && !error ? (
+              <Loading />
+            ) : (
+              <div className="flex gap-1 items-center justify-center">
+                {data?.likes}
+                <Heart set="two-tone" />
+              </div>
+            )}
           </p>
         </div>
       </div>
-    </section>
+    </Fragment>
   );
 };
 

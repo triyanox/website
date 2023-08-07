@@ -30,7 +30,7 @@ const Skills = () => {
   return (
     <section className="w-full flex justify-center items-start flex-col py-8 gap-8">
       <div className="flex flex-col justify-center items-satrt gap-4 py-2 w-full">
-        <h3 className="text-xl md:text-2xl font-bold">
+        <h3 className="text-xl md:text-2xl font-semibold">
           What is like to work with me ?
         </h3>
         <p className="text-lg text-text-secondary-light dark:text-text-secondary-dark">
@@ -45,8 +45,10 @@ const Skills = () => {
             className="flex h-full flex-col justify-center items-start gap-4 py-8 w-full px-6 bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary dark:shadow-shadow-secondary-dark rounded-2xl"
           >
             <div>{service.icon}</div>
-            <h3 className="text-xl font-bold">{service.title}</h3>
-            <p>{service.summary}</p>
+            <h3 className="text-xl font-semibold">{service.title}</h3>
+            <p className="text-text-primary-light/60 dark:text-bg-primary-light/60">
+              {service.summary}
+            </p>
           </div>
         ))}
       </Animations.StaggerContainer>

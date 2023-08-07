@@ -29,8 +29,8 @@ const LinkList = [
 const Footer = () => {
   return (
     <footer className="flex flex-col justify-center items-start py-16 lg:justify-between lg:items-center lg:flex-row gap-4">
-      <div className="flex flex-col justify-center items-start gap-4">
-        <h1 className="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">
+      <div className="flex flex-col justify-center items-start gap-2">
+        <h1 className="text-xl font-semibold text-text-primary-light dark:text-text-primary-dark">
           Mohamed Achaq
         </h1>
         <h3>Software Engineer, UI/UX designer and music producer.</h3>

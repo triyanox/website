@@ -93,7 +93,7 @@ const Posts = () => {
               className={classNames(
                 "text-lg cursor-pointer text-text-secondary-light dark:text-text-secondary-dark px-2 py-1 rounded-xl",
                 {
-                  "bg-bg-secondary-light dark:bg-bg-secondary-dark font-bold shadow-shadow-secondary dark:shadow-shadow-secondary-dark":
+                  "bg-bg-secondary-light dark:bg-bg-secondary-dark font-semibold shadow-shadow-secondary dark:shadow-shadow-secondary-dark":
                     filters.tags.includes(tag),
                 }
               )}
@@ -119,14 +119,22 @@ const Posts = () => {
             transition={{
               duration: 0.5,
             }}
-            className="w-full flex justify-center items-center gap-8 flex-col py-16"
+            className={classNames(
+              "w-full flex justify-center items-center gap-4 flex-col py-16",
+              {
+                "py-48": !utils.filterPosts(
+                  allPosts,
+                  filters.tags,
+                  filters.search
+                ).length,
+              }
+            )}
           >
-            <h1 className="text-4xl font-bold text-text-primary-light dark:text-text-primary-dark">
+            <h1 className="text-2xl text-text-primary-light dark:text-text-primary-dark">
               No posts found
             </h1>
-
             <button
-              className="text-lg text-text-secondary-light dark:text-text-secondary-dark px-2 py-1 rounded-xl bg-bg-secondary-light dark:bg-bg-secondary-dark"
+              className="text-lg text-text-secondary-light dark:text-text-secondary-dark px-4 py-2 rounded-xl bg-bg-secondary-light dark:bg-bg-secondary-dark"
               onClick={() => {
                 setFilters({
                   ...filters,
@@ -139,7 +147,7 @@ const Posts = () => {
             </button>
           </motion.div>
         ) : (
-          <Animations.PresenceContainer className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 py-8">
+          <Animations.PresenceContainer className="w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8 py-8">
             {utils
               .filterPosts(allPosts, filters.tags, filters.search)
               .sort(

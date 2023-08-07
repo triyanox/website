@@ -25,7 +25,7 @@ const MenuToggle = () => {
   });
   const spring = useTabs(hookProps);
   return (
-    <div className="py-3 px-2 shadow-shadow-secondary dark:shadow-shadow-secondary-dark rounded-2xl flex flex-row justify-center items-center gap-2 bg-bg-secondary-light dark:bg-bg-secondary-dark">
+    <div className="py-3 px-2 rounded-3xl flex flex-row justify-center items-center gap-2 bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary-tag dark:shadow-shadow-secondary-dark-tag">
       <div className="max-w-6xl">
         <Spring.Tabs {...spring.tabProps} />
       </div>

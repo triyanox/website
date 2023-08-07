@@ -20,7 +20,7 @@ const PostCard = ({ post }: { post: Post }) => {
       key={post._id}
       className="w-full flex h-full justify-center items-start gap-2 flex-col px-6 py-8 rounded-2xl bg-bg-secondary-light dark:bg-bg-secondary-dark shadow-shadow-secondary dark:shadow-shadow-secondary-dark"
     >
-      <h3 className="text-2xl font-bold">{post.title}</h3>
+      <h3 className="text-2xl font-semibold">{post.title}</h3>
       <div className="flex w-full items-center justify-start gap-2 text-xs md:text-sm text-text-secondary-light dark:text-text-secondary-dark">
         <p className="">
           {new Date(post.date).toLocaleDateString("en-US", {
@@ -36,12 +36,14 @@ const PostCard = ({ post }: { post: Post }) => {
         <p>•</p>
         {data && !error ? data.views + " views" : <Loading />}
       </div>
-      <p className="mt-4 text-xl">{post.description}</p>
+      <p className="mt-2 text-xl text-text-primary-light/60 dark:text-bg-primary-light/60">
+        {post.description}
+      </p>
       <div className="flex flex-wrap gap-2">
         {post.tags.map((tag, i) => (
           <span
             key={i}
-            className="text-md text-text-secondary-light dark:text-text-secondary-dark bg-bg-primary-light dark:bg-bg-primary-dark px-2 py-1 rounded-xl shadow-shadow-secondary-tag dark:shadow-shadow-secondary-dark-tag"
+            className="text-md text-text-secondary-light dark:text-text-secondary-dark bg-bg-primary-light dark:bg-bg-primary-dark px-3 py-1 rounded-2xl shadow-shadow-secondary-tag dark:shadow-shadow-secondary-dark-tag"
           >
             {tag}
           </span>

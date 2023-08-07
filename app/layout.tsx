@@ -4,6 +4,73 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Analytics } from "@vercel/analytics/react";
+import Local from "next/font/local";
+
+const latin = Local({
+  src: [
+    {
+      path: "./fonts/USA-Bold.woff2",
+      style: "normal",
+      weight: "bold",
+    },
+    {
+      path: "./fonts/USA-BoldItalic.woff2",
+      style: "italic",
+      weight: "bold",
+    },
+    {
+      path: "./fonts/USA-Demibold.woff2",
+      style: "normal",
+      weight: "600",
+    },
+    {
+      path: "./fonts/USA-DemiboldItalic.woff2",
+      style: "italic",
+      weight: "600",
+    },
+    {
+      path: "./fonts/USA-Light.woff2",
+      style: "normal",
+      weight: "300",
+    },
+    {
+      path: "./fonts/USA-LightItalic.woff2",
+      style: "italic",
+      weight: "300",
+    },
+    {
+      path: "./fonts/USA-Regular.woff2",
+      style: "normal",
+      weight: "normal",
+    },
+    {
+      path: "./fonts/USA-RegularItalic.woff2",
+      style: "italic",
+      weight: "normal",
+    },
+    {
+      path: "./fonts/USA-Thin.woff2",
+      style: "normal",
+      weight: "100",
+    },
+    {
+      path: "./fonts/USA-ThinItalic.woff2",
+      style: "italic",
+      weight: "100",
+    },
+    {
+      path: "./fonts/USA-Medium.woff2",
+      style: "normal",
+      weight: "500",
+    },
+    {
+      path: "./fonts/USA-MediumItalic.woff2",
+      style: "italic",
+      weight: "500",
+    },
+  ],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
