@@ -93,7 +93,7 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <body className="relative scroll-smooth bg-bg-primary-light antialiased dark:bg-bg-primary-dark px-8 md:px-24 max-w-[1920px] mx-auto">
-          <main>
+          <main className={latin.className}>
             <Header />
             {children}
             <Footer />
