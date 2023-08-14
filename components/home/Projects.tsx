@@ -7,9 +7,9 @@ import NextLink from "next/link";
 const ProjectList = [
   {
     id: "async-sequence",
-    title: "@triyanox/async-sequence",
+    title: "async-sequence",
     summary:
-      "PromiseSequencer is a utility class that enables you to execute promises sequentially with concurrency and retry capabilities.",
+      "PromiseSequencer is a utility class that enables you to execute promises sequentially",
     github: "https://github.com/triyanox/async-sequence",
     link: "https://www.npmjs.com/package/@triyanox/async-sequence",
     tags: ["node.js", "typescript", "promises", "async"],
