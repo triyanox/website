@@ -1,0 +1,674 @@
+---
+title: "Write a programming language with Typescipt"
+date: "2023-09-30"
+description: "I created an in interpreted langauge with Typescipt"
+tags: ["typescript", "compilers", "interpreter"]
+---
+
+# How I Created a Language with TypeScript
+
+Creating a programming language is an exciting and educational project that may not be as challenging as it seems. In this article, I will guide you through the process of developing an interpreted language using TypeScript.
+
+## Designing the Language Syntax
+
+Before diving into implementation, you must establish the syntax for your language. My language draws inspiration from various programming languages like Lisp, Rust, and JavaScript. To illustrate the language, here's the famous FizzBuzz program implemented in my language:
+
+```rust
+(fn fizzBuzz [limit](
+  (for [i 1 (+ limit 1)](
+    (if (( && (== (% i 3) 0) (!= (% i 5) 0)))
+      ((println "Fizz"))
+      ((if ((&& (!= (% i 3) 0) (== (% i 5) 0)))
+        ((println "Buzz"))
+        ((if ((&& (== (% i 3) 0) (== (% i 5) 0)))
+          ((println "FizzBuzz"))
+          ((println i))
+        ))
+      ))
+    )
+  ))
+))
+
+(def limit 10)
+(fizzBuzz limit)
+```
+
+In this code snippet, we define a function fizzBuzz that takes a limit as an argument. We then define a variable limit and call the function with this value. The function prints numbers from 1 to the specified limit. If a number is divisible by 3, it prints "Fizz." If divisible by 5, it prints "Buzz." If divisible by both 3 and 5, it prints "FizzBuzz."
+
+## Implementing the Lexer
+
+The initial step in building an interpreter is crafting a lexer. A lexer transforms the source code into a list of tokens, which will be used by the parser to construct the abstract syntax tree. Here's the lexer code:
+
+I opted to use the 'moo' package for creating the lexer. 'Moo' is a lexer generator for JavaScript, simplifying the task of pattern matching and token extraction.
+
+```typescript
+import moo from "moo";
+
+const lexer = moo.compile({
+  multilineComment: { match: /\/\*[^]*?\*\//, lineBreaks: true },
+  singlelineComment: { match: /\/\/.*/, lineBreaks: true },
+  keyword: [
+    "def",
+    "fn",
+    "if",
+    "else",
+    "while",
+    "for",
+    "class",
+    "extends",
+    "new",
+    "match",
+    "return",
+  ],
+  nativeFn: [
+    // ...nativeFunctions like println, readln, etc.
+  ],
+  return: "return",
+  jsCode: { match: /\$[^]*?\$/, lineBreaks: true },
+  constructor: /\.init/,
+  methodAccess: /(?:\.[a-zA-Z_][a-zA-Z0-9_]*)+/,
+  binary: /0b[01]+/,
+  hex: /0x[0-9a-fA-F]+/,
+  boolean: ["true", "false"],
+  number: /0|[1-9][0-9]*/,
+  string: /"(?:\\["\\]|[^\n"\\])*"/,
+  hash: "#",
+  lp: "(",
+  rp: ")",
+  lb: "{",
+  rb: "}",
+  lbk: "[",
+  rbk: "]",
+  comma: ",",
+  colon: ":",
+  semicolon: ";",
+  dot: ".",
+  operator: [
+    // ...operators like +, -, *, /, etc.
+  ],
+  identifier: /[a-zA-Z_][a-zA-Z0-9_]*/,
+  ws: { match: /\s+/, lineBreaks: true },
+  nl: { match: /\n/, lineBreaks: true },
+});
+
+class Lexer {
+  lexer: moo.Lexer;
+  tokens: moo.Token[];
+  code: string;
+
+  constructor(code: string) {
+    this.lexer = moo.compile(spec);
+    this.code = code;
+    this.tokens = [];
+  }
+
+  tokenize() {
+    this.lexer.reset(this.code);
+    let tokens: any[] = [];
+    let token: any;
+    while ((token = this.lexer.next())) {
+      tokens.push(token);
+    }
+    this.tokens = tokens;
+    return this;
+  }
+}
+
+export default Lexer;
+```
+
+You can utilize the lexer like this:
+
+```typescript
+const lexer = new Lexer(code).tokenize();
+const tokens = lexer.tokens; // returns an array of tokens of type moo.Token
+```
+
+That concludes the lexer implementation, and we can proceed to the parser.
+
+## Developing the Parser
+
+The parser takes the tokens from the lexer and constructs an abstract syntax tree (AST). The AST is a tree representation of the source code, with nodes representing different code elements. To make the parser modular and extensible, I implemented a plugin system.
+
+First, I created an object containing all the node types I wanted to support:
+
+```typescript
+const NodeTypes = {
+  Program: "Program",
+  Binary: "Binary",
+  Hex: "Hex",
+  Number: "Number",
+  String: "String",
+  Boolean: "Boolean",
+  List: "List",
+  Map: "Map",
+  Set: "Set",
+  BinaryLiteral: "BinaryLiteral",
+  HexLiteral: "HexLiteral",
+  NumberLiteral: "NumberLiteral",
+  StringLiteral: "StringLiteral",
+  BooleanLiteral: "BooleanLiteral",
+  ListLiteral: "ListLiteral",
+  MapLiteral: "MapLiteral",
+  SetLiteral: "SetLiteral",
+  Fn: "Fn",
+  FnCall: "FnCall",
+  NativeFnCall: "NativeFnCall",
+  Result: "Result",
+  NativeFnResult: "NativeFnResult",
+  Reference: "Reference",
+  If: "If",
+  While: "While",
+  For: "For",
+  Match: "Match",
+  BinaryExpression: "BinaryExpression",
+  UnaryExpression: "UnaryExpression",
+  BinaryExpressionLiteral: "BinaryExpressionLiteral",
+  UnaryExpressionLiteral: "UnaryExpressionLiteral",
+  JsCode: "JsCode",
+  Return: "Return",
+} as const;
+```
+
+Next, I defined types to prototype the parser:
+
+- I created a Node type with a type property, representing the node's type.
+
+```typescript
+interface Node {
+  type: keyof typeof NodeType;
+}
+```
+
+- I defined a Program node with a body property, which is an array of nodes representing the program's statements.
+
+```typescript
+interface Program extends Node {
+  type: typeof NodeType.Program;
+  body: Node[];
+}
+```
+
+- Then, I introduced an IParserPlugin interface with matcher and handler functions. The matcher function takes a parser and returns a boolean, indicating if the plugin should handle the current token. The handler function processes the token and returns a node.
+
+```typescript
+interface IParserPlugin<T extends Node = Node> {
+  matcher: (parser: Parser) => boolean;
+  handler: (parser: Parser) => T;
+}
+```
+
+- I defined a NodeType type to infer the node type from the ParserPlugin array we pass to the parser.
+
+```typescript
+type NodeType<T extends keyof typeof NodeType> =
+  typeof plugins extends IParserPlugin<infer R>[]
+    ? Extract<R, { type: T }>
+    : never;
+```
+
+- Finally, I created a utility function to throw errors with proper formatting.
+
+```typescript
+import { Token } from "moo";
+
+const debug = true;
+
+function error(message: string, token: Token, input: string) {
+  const lines = input.split("\n");
+  const line = lines[token.line - 1];
+  const col = token.col;
+  const arrow = " ".repeat(col - 1) + "^";
+
+  if (debug) {
+    throw new Error(
+      `Artemis Parser Error: ${message} at line ${token.line} column ${token.col}\n${line}\n${arrow}`
+    );
+  }
+
+  console.error(
+    `Artemis Parser Error: ${message}\nat line ${token.line} column ${token.col}\n${line}\n${arrow}`
+  );
+  process.exit(1);
+}
+```
+
+- The parser class was designed as follows:
+
+```typescript
+import { Token } from "moo";
+import IParserPlugin from "../types/parser-plugin";
+import NodeTypes from "../node/node-types";
+import Program from "../types/program";
+import error from "../error";
+import plugins from "../plugins";
+import Lexer from "@artemis-lang/lexer";
+
+class Parser {
+  tokens: Token[];
+  current: number;
+  plugins: IParserPlugin[];
+  input: string;
+  constructor(lexer: Lexer) {
+    this.tokens = this.init(lexer.tokenize().tokens);
+    this.input = lexer.code;
+    this.current = 0;
+    this.plugins = plugins;
+  }
+
+  init(tokens: moo.Token[]) {
+    return tokens.filter(
+      (v) =>
+        v.type !== "ws" &&
+        v.type !== "nl" &&
+        v.type !== "multilineComment" &&
+        v.type !== "singlelineComment"
+    );
+  }
+
+  isAtEnd() {
+    return this.current >= this.tokens.length;
+  }
+
+  isAtStart() {
+    return this.current <= 0;
+  }
+
+  peek() {
+    return this.tokens[this.current];
+  }
+
+  previous() {
+    return this.tokens[this.current - 1];
+  }
+
+  advance() {
+    if (!this.isAtEnd()) this.current++;
+    return this.previous();
+  }
+
+  match(type: string, value?: string) {
+    if (this.isAtEnd()) return false;
+    if (value) return this.peek().type === type && this.peek().value === value;
+    return this.peek().type === type;
+  }
+
+  consume(type: string, message: string) {
+    if (this.match(type)) return this.advance();
+    throw error(message, this.peek(), this.input);
+  }
+
+  plugin(plugin: IParserPlugin) {
+    this.plugins.push(plugin);
+  }
+
+  add(...plugins: IParserPlugin[]) {
+    this.plugins.push(...plugins);
+  }
+
+  next() {
+    if (!this.isAtEnd()) return this.tokens[this.current++];
+    return this.tokens[this.current];
+  }
+
+  nextBy(n: number) {
+    if (!this.isAtEnd()) return this.tokens[this.current + n];
+    return this.tokens[this.current];
+  }
+
+  nextByType(n: number) {
+    return this.nextBy(n).type;
+  }
+
+  parse() {
+    const program: Program = {
+      type: NodeTypes.Program,
+      body: [],
+    };
+
+    while (!this.isAtEnd()) {
+      program.body.push(this.parseExpression());
+    }
+
+    return program;
+  }
+
+  parseExpression() {
+    for (const plugin of this.plugins) {
+      if (plugin.matcher(this)) return plugin.handler(this);
+    }
+    throw error("Unexpected token", this.peek(), this.input);
+  }
+}
+```
+
+The parser class has a `parse` method that parses the tokens and returns a `Program` node. The `parseExpression` method is the main method of the parser. It loops through the plugins and calls the `matcher` function of each plugin. If the `matcher` function returns true, it calls the `handler` function of the plugin and returns the node. If none of the plugins match, it throws an error.
+
+Let's define a plugin to parse strings:
+
+```typescript
+import NodeTypes from "../../node/node-types";
+import ParserPlugin from "../../parser-plugin";
+
+const stringPlugin = new ParserPlugin(
+  (parser) => {
+    return parser.match("string");
+  },
+  (parser) => {
+    return {
+      type: NodeTypes.StringLiteral,
+      value: parser.consume("string", "Expected string").value,
+    };
+  }
+);
+
+export default stringPlugin;
+```
+
+The `matcher` function checks if the current token type is `string`. If it is, it returns true. The `handler` function returns a `StringLiteral` node with the value of the string.
+
+And now we can do the same thing for other types of tokens like numbers, booleans, etc, and simply add them to the parser and we can have a fully functional parser with the ability to add new nodes without having to change the parser itself.
+
+```typescript
+// import all the plugins
+
+const plugins = [
+  // ...all the plugins
+];
+
+export default plugins;
+```
+
+And we can use it like this:
+
+```typescript
+import plugins from "./plugins";
+
+const parser = new Parser(lexer);
+parser.add(...otherPlugins);
+const ast = parser.parse();
+```
+
+And that's pretty much it for the parser. Now we can move on to the interpreter.
+
+## Implementing the Interpreter
+
+The interpreter takes the abstract syntax tree and executes it basically. Essentially, it traverses the tree and executes the nodes.
+
+Before we start implementing the interpreter, we need an environment. An environment is a map of variables and their values. We need an environment to store the variables and their values. We also need to be able to create new environments and to be able to access the parent environment. So I created an `Environment` class:
+
+```typescript
+class Environment {
+  private values: { [key: string]: any } = {};
+  private returnValue: any = undefined;
+
+  constructor(private parent?: Environment) {}
+
+  getParent(): Environment | undefined {
+    return this.parent;
+  }
+
+  set(name: string, value: any): void {
+    this.values[name] = value;
+  }
+
+  setToParent(name: string, value: any): void {
+    if (this.parent) {
+      this.parent.set(name, value);
+    }
+  }
+
+  getFromParent(name: string): any {
+    if (this.parent) {
+      return this.parent.get(name);
+    }
+    throw new Error(`Variable '${name}' not found.`);
+  }
+
+  setReturn(value: any): void {
+    this.returnValue = value;
+  }
+
+  getReturn(): any {
+    return this.returnValue;
+  }
+
+  get(name: string): any {
+    if (name in this.values) {
+      return this.values[name];
+    }
+    if (this.parent) {
+      return this.parent.get(name);
+    }
+    throw new Error(`Variable '${name}' not found.`);
+  }
+
+  getNested(root: string, keys: string[]) {
+    let value = this.get(root) as Record<string, any>;
+    for (let key of keys) {
+      value = value[key];
+    }
+    return value;
+  }
+}
+
+export default Environment;
+```
+
+The Environment class maintains a map of variables and their values. It allows for variable storage, retrieval, and scoping.
+
+Also we need to have a native functions implementation so we can have functions like `println`, `readln`, etc. So I created a `INativeFunction` interface:
+
+```typescript
+interface INativeFunction<T extends string, U extends any[], R extends any> {
+  name: T;
+  fn: (interpreter: Interpreter, ...args: U) => R;
+}
+```
+
+Then I implemented the `NativeFunction` class from this interface:
+
+```typescript
+class NativeFn<T extends string, U extends any[], R extends any>
+  implements INativeFunction<T, U, R>
+{
+  public name: T;
+  public fn: (interpreter: Interpreter, ...args: U) => R;
+  constructor(name: T, fn: (interpreter: Interpreter, ...args: U) => R) {
+    this.name = name;
+    this.fn = fn;
+  }
+}
+```
+
+The NativeFn class is a versatile way to define native functions. It has a name property representing the function's name and an fn property representing the actual JavaScript function that will be executed when the native function is called.
+
+With native functions defined, we can set them in the global environment of the interpreter. Here's an example of how you can define and load native functions:
+
+```typescript
+import NativeFn from "./native-fn";
+
+const println = new NativeFn("println", (_interpreter, args) => {
+  if (args) {
+    process.stdout.write(args.join(" ") + "\n");
+  }
+});
+
+export default println;
+```
+
+The `println` function takes an interpreter and some arguments. It prints out the arguments to the console. Now we can define all the native functions we need and set them in the global environment of the interpreter.
+
+```typescript
+const nativeFns = [
+  // ...all the native functions
+];
+function loadNative(interpreter: Interpreter) {
+  for (const nativeFn of nativeFns) {
+    interpreter.native(nativeFn.name, nativeFn.fn.bind(null, interpreter));
+  }
+}
+```
+
+The loadNative function iterates through the native functions and adds them to the interpreter's global environment.
+
+Now, let's move on to the interpreter's implementation:
+
+```typescript
+export default class Interpreter {
+  private globalEnv: Environment;
+
+  constructor() {
+    this.globalEnv = new Environment();
+    loadNative(this);
+    loadGlobals(this);
+  }
+
+  public static interpret(code: string) {
+    const lexer = new Lexer(code);
+    const parser = new Parser(lexer);
+    const ast = parser.parse();
+    const interpreter = new Interpreter();
+    return interpreter.execute(ast);
+  }
+
+  public static ast(code: string) {
+    const lexer = new Lexer(code);
+    const parser = new Parser(lexer);
+    return parser.parse();
+  }
+
+  public static tokens(code: string) {
+    const lexer = new Lexer(code);
+    return lexer.tokenize().tokens;
+  }
+
+  get global(): Environment {
+    return this.globalEnv;
+  }
+
+  native(name: string, fn: (...args: any[]) => any) {
+    this.globalEnv.set(name, fn);
+  }
+
+  visitProgram(program: Program, env: Environment) {
+    let result = null;
+    for (const statement of program.body) {
+      result = this.visit(statement, env);
+    }
+    return result;
+  }
+
+  execute(program: Program) {
+    return this.visitProgram(program, this.globalEnv);
+  }
+
+  visit(node: Node, env: Environment): any {
+    switch (node.type) {
+      case "String":
+        return this.visitString(node as NodeType<"String">, env);
+      // ...other node types cases
+      default:
+        throw new Error(`Unknown node type '${node.type}'`);
+    }
+  }
+
+  visitString(node: NodeType<"String">, env: Environment): any {
+    env.set(node.name, String(node.value).replace(/^"(.*)"$/, "$1"));
+  }
+}
+```
+
+The Interpreter class handles the interpretation process. It offers static methods for interpreting code, obtaining the AST, and tokenizing the source code.
+
+The `visit` method is central to the interpreter. It switches on the node type and delegates to specific visit methods for different node types.
+
+Native functions can be added to the interpreter's `global` environment using the native method.
+
+The execute method takes a Program node and executes it by visiting each statement in the program.
+
+For node types that require their own scope (e.g., function calls), a new environment is created with the root environment as its parent. This allows for variable scoping and isolation.
+
+Finally, the loadNative function loads native functions into the global environment, and loadGlobals can be used to load other global variables and functions.
+
+And for each node that requires its own scope, we create a new environment with the root environment as a parent and construct it for example we want to run a function I created a `Fn` construct
+
+```typescript
+import Interpreter from "..";
+import { Node } from "@artemis-lang/parser";
+import Environment from "../../env";
+
+class Fn {
+  args: string[];
+  body: Node[];
+  env: Environment;
+
+  constructor(args: string[], body: Node[], env: Environment) {
+    this.args = args;
+    this.body = body;
+    this.env = env;
+  }
+
+  call(args: any[]): any {
+    const fnEnv = new Environment(this.env);
+    this.args.forEach((arg, index) => {
+      fnEnv.set(arg, args[index]);
+    });
+    const interpreter = new Interpreter();
+    const call = interpreter.visitProgram(
+      {
+        type: "Program",
+        body: this.body,
+      },
+      fnEnv
+    );
+
+    if (fnEnv.getReturn() !== undefined) {
+      this.env.setToParent("return", fnEnv.getReturn());
+      return fnEnv.getReturn();
+    } else {
+      try {
+        const val = this.env.get("return");
+        this.env.setToParent("return", val);
+        return val;
+      } catch {
+        return call;
+      }
+    }
+  }
+}
+
+export default Fn;
+```
+
+And I used it like this:
+
+```typescript
+//...other code
+visitFn(node: NodeType<'Fn'>, env: Environment): any {
+    const fn = new Fn(node.args, node.body, env);
+    env.set(node.name, fn);
+  }
+
+visitFnCall(node: NodeType<'FnCall'>, env: Environment): any {
+    const fn = env.get(node.name) as Fn;
+    const args = node.params.map((arg) => this.visit(arg, env));
+    return fn.call(args);
+}
+//...other code
+```
+
+That's pretty much it for the interpreter, I didn't go into much detail because it's not the main focus of this post. If you want to see the full code, you can check out the [GitHub repo](https://github.com/triyanox/artemis/tree/main) of the language, and you can find also some examples there.
+To try the language, you can install the package from npm and run it:
+
+```bash
+npm i -g @artemis-lang/cli
+# and then
+artemis run <file>.art
+```
+
+## Conclusion
+
+Making a programming language is a fun project in which you can learn a lot, And it's not as hard as you might think. In this post I showed you how I wrote an interpreted language with TypeScript. I hope you enjoyed this post. If you have any questions or suggestions, feel free to leave a comment below.
+
+Happy coding!
