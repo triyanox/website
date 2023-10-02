@@ -6,6 +6,25 @@ import NextLink from "next/link";
 
 const ProjectList = [
   {
+    id: "artemis",
+    title: "artemis",
+    summary:
+      "artemis is an interpreted programming language written in TypeScript",
+    github: "https://github.com/triyanox/artemis",
+    link: "https://www.npmjs.com/package/@artemis-lang/cli",
+    tags: ["node.js", "typescript", "programming language", "interpreter"],
+    type: "cli",
+  },
+  {
+    id: "Matz",
+    title: "Matz",
+    summary: "Matz is dsl for working with matrices and vectors.",
+    github: "https://github.com/triyanox/matz",
+    link: "https://github.com/triyanox/matz/pkgs/container/matz",
+    tags: ["node.js", "typescript", "dsl"],
+    type: "cli",
+  },
+  {
     id: "async-sequence",
     title: "async-sequence",
     summary:
